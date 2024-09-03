@@ -1,0 +1,107 @@
+﻿Build1=Default,com.frost.pocketbase
+File1=Layout.bal
+FileGroup1=Default Group
+Group=Default Group
+Library1=core
+Library2=javaobject
+Library3=threading
+Library4=xui
+Library5=phone
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.LightTheme)~\n~'End of default text.~\n~~\n~~\n~~\n~~\n~~\n~AddPermission(android.permission.INTERNET)~\n~AddPermission(android.permission.ACCESS_NETWORK_STATE)~\n~~\n~~\n~~\n~'    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />~\n~'    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />~\n~'    <uses-permission android:name="android.permission.WAKE_LOCK" />
+Module1=FrostPocketBase
+Module2=Starter
+NumberOfFiles=1
+NumberOfLibraries=5
+NumberOfModules=2
+Version=13
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: FrostPocketbase
+	#VersionCode: 1
+	#VersionName: 1
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+	
+	#BridgeLogger: True
+	#AdditionalJar: pocketbaseMobile.aar
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+	Private xui As XUI
+	Public FrostPocketBase1 As FrostPocketBase
+	Private PocketbaseThread As Thread
+	
+	Private PhoneIntents As PhoneIntents
+End Sub
+
+Sub Globals
+	'These global variables will be redeclared each time the activity is created.
+	Private EditText1 As EditText
+	Private StartButton As Button
+	Private StopButton As Button
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Layout")
+	
+	FrostPocketBase1.Initialize(Me, "FrostPocketBase1")
+	PocketbaseThread.Initialise("PocketbaseThread")
+	
+	EditText1.Text = $"
+	PocketBase Version:  ${FrostPocketBase1.Version}
+	
+	➜ REST API: http://127.0.0.1:8097/api/
+	➜ Admin UI: http://127.0.0.1:8097/_/
+	"$
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+Private Sub StartButton_Click
+	StartButton.Enabled = False
+	StopButton.Enabled = True
+	
+	PocketbaseThread.Start(Me, "StartPocketbaseThread", Null)
+End Sub
+
+'Call this using a thread
+Private Sub StartPocketbaseThread 'ignore
+		Log("Running PocketBase")
+		FrostPocketBase1.Start(File.DirInternal, "127.0.0.1", "8097", True)
+End Sub
+
+Private Sub StopButton_Click
+	StartButton.Enabled = True
+	StopButton.Enabled = False
+
+	FrostPocketBase1.Stop
+	Log("Stopped Pocketbase")
+End Sub
+
+'Handle command here
+Private Sub FrostPocketBase1_OnCommand(command As String, data As String)
+	LogColor("FrostPocketBase1_OnCommand", Colors.Red)
+	Log(command & ":  " & data)
+End Sub
+
+Private Sub Button1_Click
+	StartActivity (PhoneIntents.OpenBrowser("https://dashboard.flutterwave.com/donate/xua1z1xmabji"))
+End Sub
+
+Private Sub Button2_Click
+	StartActivity (PhoneIntents.OpenBrowser("https://paystack.com/pay/rbhzwdgozj"))
+End Sub
