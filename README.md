@@ -9,6 +9,7 @@ FrostPocketBaseMobile is a full B4A (Android) wrapper for the [Pocketbase-mobile
 
 2. **Add to B4A Library Folder:**
    - Move the AAR file to your B4A additional library folder.
+   - Make sure you have the [Threading library](https://www.b4x.com/android/forum/threads/threading-library.6775/) in your additional library folder also.
 
 3. **Run the B4A Project:**
    - After setting up, run the B4A project.
